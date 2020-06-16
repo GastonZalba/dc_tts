@@ -89,7 +89,7 @@ def spectrogram2wav(mag):
     wav = signal.lfilter([1], [1, -hp.preemphasis], wav)
 
     # trim
-    wav, _ = librosa.effects.trim(wav)
+    wav = trim(wav)
 
     return wav.astype(np.float32)
 
@@ -161,3 +161,12 @@ def load_spectrograms(fpath):
     mel = mel[::hp.r, :]
     return fname, mel, mag
 
+#This is adapted by
+# https://github.com/keithito/tacotron/blob/master/util/audio.py#L55-62
+def trim(wav, top_db=40, min_silence_sec=0.8):
+    frame_length = int(hp.sr * min_silence_sec)
+    hop_length = int(frame_length / 4)
+    endpoint = librosa.effects.split(wav, frame_length=frame_length,
+                               hop_length=hop_length,
+                               top_db=top_db)[0, 1]
+    return wav[:endpoint]
