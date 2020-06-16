@@ -6,8 +6,11 @@ https://www.github.com/kyubyong/dc_tts
 '''
 class Hyperparams:
     '''Hyper parameters'''
+
+    voice = "borges"
+
     # pipeline
-    prepro = True  # if True, run `python prepro.py` first before running `python train.py`.
+    prepro = False  # if True, run `python prepro.py` first before running `python train.py`.
     
     # signal processing
     sr = 22050  # Sampling rate.
@@ -32,16 +35,19 @@ class Hyperparams:
     attention_win_size = 3
 
     # data
-    data = "/data/private/voice/LJSpeech-1.0"
-    # data = "/data/private/voice/kate"
-    test_data = 'harvard_sentences.txt'
-    vocab = "PE abcdefghijklmnopqrstuvwxyz'.?" # P: Padding, E: EOS.
-    max_N = 180 # Maximum number of characters.
-    max_T = 210 # Maximum number of mel frames.
+    data = "voces_procesadas/{}/data".format(voice)
+    test_data = "textos_para_sintetizar/es.txt".format(voice)
+    vocab = u'''␀␃ !',-.:;?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz¡¿ÁÅÉÍÓÚáæèéëíîñóöúü—'''
+    max_N = 382 # Maximum number of characters. Default: 180
+    max_T = 522 # Maximum number of mel frames. Default: 210
 
     # training scheme
+    beta1 = 0.5
+    beta2 = 0.9
+    epsilon = 0.000006
     lr = 0.001 # Initial learning rate.
-    logdir = "logdir/LJ01"
-    sampledir = 'samples'
-    B = 32 # batch size
-    num_iterations = 2000000
+
+    logdir = "voces_procesadas/{}/logdir".format(voice)
+    sampledir = 'voces_procesadas/{}/samples'.format(voice)
+    B = 24 # batch size
+    num_iterations = 450000

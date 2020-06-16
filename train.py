@@ -119,7 +119,7 @@ class Graph:
 
             # Training Scheme
             self.lr = learning_rate_decay(hp.lr, self.global_step)
-            self.optimizer = tf.train.AdamOptimizer(learning_rate=self.lr)
+            self.optimizer = tf.train.AdamOptimizer(learning_rate=self.lr,beta1=hp.beta1,beta2=hp.beta2,epsilon=hp.epsilon)
             tf.summary.scalar("lr", self.lr)
 
             ## gradient clipping
@@ -156,7 +156,7 @@ if __name__ == '__main__':
                         alignments = sess.run(g.alignments)
                         plot_alignment(alignments[0], str(gs // 1000).zfill(3) + "k", logdir)
 
-                # break
-                if gs > hp.num_iterations: break
+            # break
+            if gs > hp.num_iterations: break
 
     print("Done")

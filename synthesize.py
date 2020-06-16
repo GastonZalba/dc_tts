@@ -25,6 +25,8 @@ def synthesize():
     # Load graph
     g = Graph(mode="synthesize"); print("Graph loaded")
 
+    checkpoint = get_latest_checkpoint()
+
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
 
@@ -56,12 +58,25 @@ def synthesize():
         # Get magnitude
         Z = sess.run(g.Z, {g.Y: Y})
 
+        # Create folder for samples
+        sampledir = hp.sampledir+"_{}".format(checkpoint)
+        if not os.path.exists(sampledir): os.makedirs(sampledir)
+
         # Generate wav files
-        if not os.path.exists(hp.sampledir): os.makedirs(hp.sampledir)
         for i, mag in enumerate(Z):
             print("Working on file", i+1)
             wav = spectrogram2wav(mag)
-            write(hp.sampledir + "/{}.wav".format(i+1), hp.sr, wav)
+            filename =  hp.voice + "_"+ checkpoint + "_" + str(i+1)
+            write(sampledir + "/{}.wav".format(filename), hp.sr, wav)
+
+
+def get_latest_checkpoint(logdir_path=hp.logdir+ "-1"):
+    with open(os.path.join(logdir_path, "checkpoint")) as f:
+        text = f.readline()
+    pattern = re.compile(r"[0-9]+k")
+    basename = pattern.findall(text)[0]
+    return basename
+
 
 if __name__ == '__main__':
     synthesize()
