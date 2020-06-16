@@ -43,8 +43,9 @@ Pasos 4 y 5 pueden ejecutarse al mismo tiempo si se dipone más de una GPU.
   * Los caracteres válidos para la sitetización son `!',-.:;?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz¡¿ÁÅÉÍÓÚáæèéëíîñóöúü—`
 
 ## Ejemplos
-<img src="https://i1.sndcdn.com/artworks-YcIk2uBRdHp0TLzR-1ow4SA-t200x200.jpg" height="200" align="right">
+<img src="https://i1.sndcdn.com/artworks-YcIk2uBRdHp0TLzR-1ow4SA-t200x200.jpg" height="200" align="right"/>
 [Jorge Luis Borges](https://soundcloud.com/gaston-zalba-261494881/sets/dc_tts_borges_451k) - 451K
+<br>
 
 ## @TODO
   * Creación de interfaz web para facilitar las transcripciones
