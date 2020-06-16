@@ -53,7 +53,7 @@ def load_data(mode="train"):
             text = " ".join(text.split(" ")[1:])
             text += u"␃"
             return text
-        lines = codecs.open(hp.test_data, 'r', 'utf-8').read().splitlines()
+        lines = codecs.open(hp.test_data, 'r', 'utf-8-sig').read().splitlines()
         sents = [_normalize(line) for line in lines[1:]] # ␃: EOS
         texts = np.zeros((len(sents), hp.max_N), np.int32)
         for i, sent in enumerate(sents):
