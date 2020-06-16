@@ -42,8 +42,11 @@ Pasos 4 y 5 pueden ejecutarse al mismo tiempo si se dipone más de una GPU.
   * Ejecutar `python synthesize.py` y revisar archivos exportados en la carpeta `samples`.
   * Los caracteres válidos para la sitetización son `!',-.:;?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz¡¿ÁÅÉÍÓÚáæèéëíîñóöúü—`
 
+## Ejemplos
+<img src="https://i1.sndcdn.com/artworks-YcIk2uBRdHp0TLzR-1ow4SA-t200x200.jpg" height="200" align="right">
+[Jorge Luis Borges](https://soundcloud.com/gaston-zalba-261494881/sets/dc_tts_borges_451k) - 451K
+
 ## @TODO
-  * Ejemplos
   * Creación de interfaz web para facilitar las transcripciones
   * Adpatación de proyectos Jupyter
 
