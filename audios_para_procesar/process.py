@@ -11,7 +11,7 @@ import unicodedata
 # folders
 inputFolder = "Borges"
 tmpFolder = inputFolder + "/_tmp" # for audio Chunks
-outputFolder = "../voces_procesadas/"
+outputFolder = "../voces_procesadas/{}/data/".format(inputFolder)
 
 # merge files upon this seconds
 maxduration = 10
@@ -23,7 +23,6 @@ outrate = 22050
 min_silence_len = 500
 silence_thresh = -16
 keep_silence = 200
-
 
 def splitFilesBySilence():
     for dirpath, subdirs, files in os.walk(inputFolder):    
@@ -37,8 +36,7 @@ def mergePieces():
     for dirpath, subdirs, files in os.walk(tmpFolder):        
 
         for dir in subdirs:
-            outputSubfolder = outputFolder + "/" + inputFolder + "/" + dir
-            outputSubfolder = outputSubfolder.replace(" ", "_")
+            outputSubfolder = outputFolder + dir
             infiles = glob.glob( tmpFolder + '/' + dir + "/*.wav") # wav files only
             data = [[]]
             durations = [[]]
@@ -66,7 +64,6 @@ def mergePieces():
             for i, d in enumerate(data):
                 duration = round(durations[i],2)
                 fileOutput = dir + "_{:04d}.wav".format(i)
-                fileOutput = fileOutput.replace(" ", "_")
 
                 writeTranscript(dir, fileOutput, duration)
 
@@ -121,7 +118,7 @@ def split(filepath, fileName):
     for i, chunk in enumerate(chunks):
         chunk.export(tmpFolder + '/' + fileName + '/' + fileName + "_{:04d}.wav".format(i), format="wav")
 
-# Remove accents, whitespaces and Upercases
+# Remove accents, whitespaces and Uppercases
 def clean_filename(s):
     s = os.path.splitext(s)[0]
     return strip_accents(s).replace(" ", "_").lower()
