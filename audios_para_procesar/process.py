@@ -1,6 +1,7 @@
 import librosa
 import glob
 import os
+import sys
 
 import numpy as np
 from pydub import AudioSegment
@@ -11,13 +12,8 @@ import unicodedata
 import speech_recognition as sr
 r = sr.Recognizer()
 
-# folders
-inputFolder = "moria"
-tmpFolder = inputFolder + "/_tmp"  # for audio Chunks
-outputFolder = "../voces_procesadas/{}/data/".format(inputFolder)
-
 # merge files upon this seconds
-max_duration = 7
+max_duration = 10
 
 # output files
 outrate = 22050
@@ -33,9 +29,10 @@ language = 'es-AR'
 
 transcript_name = 'transcript.txt'
 
+
 def splitFilesBySilence():
 
-    print('Starting spliting files')
+    print('File splitting started')
 
     exclude = set(['_tmp'])
     for dirpath, subdirs, files in os.walk(inputFolder, topdown=True):
@@ -48,7 +45,7 @@ def splitFilesBySilence():
 
 def mergePieces():
 
-    print('Starting merging files')
+    print('File merging started')
 
     createTranscript()
 
@@ -100,10 +97,7 @@ def mergePieces():
             print('Total files:', len(data))
 
 
-def createTranscript():
-    if not os.path.exists(outputFolder):
-        os.makedirs(
-            outputFolder)  # create output folder
+def createTranscript():   
     file = open(outputFolder + '/' + transcript_name, 'w')
     file.close()
     print('Created transcript')
@@ -161,9 +155,6 @@ def split(filepath, fileName):
     )
 
     tmpSubfolder = tmpFolder + "/" + fileName
-
-    if not os.path.exists(tmpFolder):
-        os.makedirs(tmpFolder)  # create tmp folder
     if not os.path.exists(tmpSubfolder):
         os.makedirs(tmpSubfolder)  # create output subfolder
 
@@ -173,6 +164,31 @@ def split(filepath, fileName):
     for i, chunk in enumerate(chunks):
         chunk.export(tmpFolder + '/' + fileName + '/' +
                      fileName + "_{:04d}.wav".format(i), format="wav")
+
+
+inputFolder
+tmpFolder
+outpuFolder
+
+def prepareFolders():
+    global inputFolder
+    global tmpFolder
+    global outpuFolder
+
+    inputFolder = str(sys.argv[1])
+    
+    if not os.path.exists(inputFolder):
+        print('Folder not found')
+        exit()
+
+    tmpFolder = inputFolder + "/_tmp" # for audio Chunks
+    outputFolder = "../voces_procesadas/{}/data/".format(inputFolder)
+    
+    if not os.path.exists(outputFolder):
+        os.makedirs(outputFolder)  # create output folder
+
+    if not os.path.exists(tmpFolder):
+        os.makedirs(tmpFolder)  # create tmp folder
 
 
 # Remove accents, whitespaces and Uppercases
@@ -186,6 +202,7 @@ def strip_accents(s):
                    if unicodedata.category(c) != 'Mn')
 
 
+prepareFolders()
 splitFilesBySilence()
 mergePieces()
 print('Done')

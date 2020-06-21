@@ -34,9 +34,9 @@ Para materiales obtenidos de entrevistas o charlas casuales:
 
 ## Procesamiento del dataset
   * Paso 0. Crear una carpeta en `/audios_para_procesar` con el nombre de la voz a entrenar y colocar los archivos wav dentro.
-  * Paso 1. Ejecutar `python process.py`. Se crearán los archivos dentro de su correspondiente subcarpeta en `/voces_procesadas/`, y el txt para la posterior transcripción. Este procedimiento convierte los audios a:
+  * Paso 1. Ejecutar `python process.py {nombre_carpeta}`. Se crearán los archivos dentro de su correspondiente subcarpeta en `/voces_procesadas/`, y el txt para la posterior transcripción. Este procedimiento convierte los audios a:
     * mono
-    * 32 bits flotante
+    * 32 bits
     * 22.050Mhz
     * una duración no mayor a los 10 segundos
   * Paso 3. Realizar transcripción de los textos usando como base el archivo `transcript.txt`:
