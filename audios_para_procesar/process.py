@@ -1,17 +1,15 @@
 import librosa
 import glob
 import os
-import re
+
 import numpy as np
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
 import soundfile as sf
 import unicodedata
 
-
 import speech_recognition as sr
 r = sr.Recognizer()
-
 
 # folders
 inputFolder = "moria"
@@ -19,7 +17,7 @@ tmpFolder = inputFolder + "/_tmp"  # for audio Chunks
 outputFolder = "../voces_procesadas/{}/data/".format(inputFolder)
 
 # merge files upon this seconds
-maxduration = 7
+max_duration = 7
 
 # output files
 outrate = 22050
@@ -29,17 +27,29 @@ min_silence_len = 200
 silence_thresh = -16
 keep_silence = 200
 
+# use Google to convert speech to Text
+speech_to_text = True
+language = 'es-AR'
+
+transcript_name = 'transcript.txt'
 
 def splitFilesBySilence():
+
+    print('Starting spliting files')
+
     exclude = set(['_tmp'])
     for dirpath, subdirs, files in os.walk(inputFolder, topdown=True):
         subdirs[:] = [d for d in subdirs if d not in exclude]
         for file in files:
             fileName = clean_filename(file)
+            print('Splitted', fileName)
             split(os.path.join(dirpath, file), fileName)
 
 
 def mergePieces():
+
+    print('Starting merging files')
+
     createTranscript()
 
     for dirpath, subdirs, files in os.walk(tmpFolder):
@@ -62,7 +72,7 @@ def mergePieces():
                 y, sr = librosa.load(infile, sr=outrate,
                                      mono=True)  # Downsample
 
-                if mixDuration <= maxduration:
+                if mixDuration <= max_duration:
                     data[outputNum] = np.append(data[outputNum], y)
                     durations[outputNum] = mixDuration
                 else:
@@ -83,6 +93,8 @@ def mergePieces():
 
                 sf.write(outfile, d, outrate, 'PCM_32')
 
+                print('Created file', fileOutput)
+
                 writeTranscript(dir, fileOutput, duration, outfile)
 
             print('Total files:', len(data))
@@ -92,34 +104,44 @@ def createTranscript():
     if not os.path.exists(outputFolder):
         os.makedirs(
             outputFolder)  # create output folder
-    file = open(outputFolder + '/transcript.txt', 'w')
+    file = open(outputFolder + '/' + transcript_name, 'w')
     file.close()
-    print('transcript.txt creado.')
+    print('Created transcript')
 
 
-def writeTranscript(dir, fileOutput, duration, outfile):
+def speechToText(outfile):
 
     with sr.AudioFile(outfile) as source:
         audio_text = r.listen(source)
 
         try:
             # using google speech recognition
-            text = r.recognize_google(audio_text, language='es-AR')
+            text = r.recognize_google(audio_text, language=language)
             print(text)
 
         except:
             text = '*' # valor por defecto si no se pudo decodificar el texto
-            print('No se pudo reconocer el audio')
+            print('Speech not recognized')
 
         finally:
-            line = dir.replace(" ", "_") + '/' + fileOutput + '|'  # file
-            line += text + '|' # transcript 1
-            line += text + '|' # transcript 2
-            line += str(duration) # length in seconds
-            line += "\n"
-            file = open(outputFolder + '/transcript.txt', 'a')
-            file.write(line)
-            file.close()
+            return text
+
+
+def writeTranscript(dir, fileOutput, duration, outfile):
+
+    if speech_to_text:
+        text = speechToText(outfile)
+    else:
+        text = '*'
+
+    line = dir.replace(" ", "_") + '/' + fileOutput + '|'  # file
+    line += text + '|' # transcript 1
+    line += text + '|' # transcript 2
+    line += str(duration) # length in seconds
+    line += "\n"
+    file = open(outputFolder + '/' + transcript_name, 'a')
+    file.write(line)
+    file.close()
 
 
 def split(filepath, fileName):
@@ -145,16 +167,15 @@ def split(filepath, fileName):
     if not os.path.exists(tmpSubfolder):
         os.makedirs(tmpSubfolder)  # create output subfolder
 
-    print('Created folder ', fileName)
+    print('Created folder', fileName)
     print('Splitted in', len(chunks), 'chunks')
 
     for i, chunk in enumerate(chunks):
         chunk.export(tmpFolder + '/' + fileName + '/' +
                      fileName + "_{:04d}.wav".format(i), format="wav")
 
+
 # Remove accents, whitespaces and Uppercases
-
-
 def clean_filename(s):
     s = os.path.splitext(s)[0]
     return strip_accents(s).replace(" ", "_").lower()
