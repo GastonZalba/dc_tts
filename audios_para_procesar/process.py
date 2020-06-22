@@ -168,12 +168,12 @@ def split(filepath, fileName):
 
 inputFolder = ''
 tmpFolder = ''
-outpuFolder = ''
+outputFolder = ''
 
 def prepareFolders():
     global inputFolder
     global tmpFolder
-    global outpuFolder
+    global outputFolder
 
     inputFolder = str(sys.argv[1])
     
