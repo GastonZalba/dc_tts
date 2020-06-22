@@ -13,7 +13,7 @@ import speech_recognition as sr
 r = sr.Recognizer()
 
 # merge files upon this seconds
-max_duration = 10
+max_duration = 7
 
 # output files
 outrate = 22050
@@ -130,7 +130,7 @@ def writeTranscript(dir, fileOutput, duration, outfile):
 
     line = dir.replace(" ", "_") + '/' + fileOutput + '|'  # file
     line += text + '|' # transcript 1
-    line += text + '|' # transcript 2
+    line += '*|' # transcript 2
     line += str(duration) # length in seconds
     line += "\n"
     file = open(outputFolder + '/' + transcript_name, 'a')
@@ -166,9 +166,9 @@ def split(filepath, fileName):
                      fileName + "_{:04d}.wav".format(i), format="wav")
 
 
-inputFolder
-tmpFolder
-outpuFolder
+inputFolder = ''
+tmpFolder = ''
+outpuFolder = ''
 
 def prepareFolders():
     global inputFolder
