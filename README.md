@@ -32,6 +32,7 @@ Para materiales obtenidos de entrevistas o charlas casuales:
 - Normalizar el audio, por clips, a unos -5db.
 - Exportar editado en wav
 
+
 ## Procesamiento del dataset
   * Paso 0. Usar [wav_to_transcript](https://github.com/GastonZalba/wav_to_transcript) para preparar los archivos de audio.
   * Paso 1. Mover los archivos de audio generados y el transcript final a una subcarpeta dentro de voces_procesadas.
