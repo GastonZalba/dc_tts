@@ -19,7 +19,12 @@ from data_load import load_data
 from scipy.io.wavfile import write
 from tqdm import tqdm
 
+
+
+
 def synthesize():
+
+
     # Load data
     L = load_data("synthesize")
 
@@ -27,6 +32,8 @@ def synthesize():
     g = Graph(mode="synthesize"); print("Graph loaded")
 
     checkpoint = get_latest_checkpoint()
+
+    print("Working on...", checkpoint)
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
@@ -82,5 +89,3 @@ def get_latest_checkpoint(logdir_path=hp.logdir+ "-1"):
 if __name__ == '__main__':
     synthesize()
     print("Done")
-
-

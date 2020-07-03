@@ -33,15 +33,9 @@ Para materiales obtenidos de entrevistas o charlas casuales:
 - Exportar editado en wav
 
 ## Procesamiento del dataset
-  * Paso 0. Crear una carpeta en `/audios_para_procesar` con el nombre de la voz a entrenar y colocar los archivos wav dentro.
-  * Paso 1. Ejecutar `python process.py {nombre_carpeta}`. Se crearán los archivos dentro de su correspondiente subcarpeta en `/voces_procesadas/`, y el txt para la posterior transcripción. Este procedimiento convierte los audios a:
-    * mono
-    * 32 bits
-    * 22.050Mhz
-    * una duración no mayor a los 10 segundos
-  * Paso 3. Realizar transcripción de los textos usando como base el archivo `transcript.txt`:
-    * reemplazar los `*` con la transcripción del archivo. En el primero dejar los caracteres en formato númerico (3, 22) y signos. En el segundo `*`, eliminar toda clase de signos (excepto ¿?¡!-.,;:...), y colocar números en formato alfabético (tres, veintidós).
-    * respetar las palabras exactas, acentos, interjeciones y onomatopeyas, de otro modo el resultado no será satisfactorio.
+  * Paso 0. Usar [wav_to_transcript](https://github.com/GastonZalba/wav_to_transcript) para preparar los archivos de audio.
+  * Paso 1. Mover los archivos de audio generados y el transcript final a una subcarpeta dentro de voces_procesadas.
+
 
 ## Entrenamiento / Transferencia
   * Paso 0. Para tranferencias, descargar el modelo en español de [css10](https://github.com/Kyubyong/css10) o alguno semejante.
