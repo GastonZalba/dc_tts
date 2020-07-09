@@ -5,7 +5,8 @@ Esta es una implementación del repositiorio [dc_tts](https://github.com/Kyubyon
 
 ## Requerimientos
   * NumPy >= 1.11.1
-  * TensorFlow >= 1.3 (Note that the API of `tf.contrib.layers.layer_norm` has changed since 1.3)
+  * TensorFlow >= 1.3 < 2  (Note that the API of `tf.contrib.layers.layer_norm` has changed since 1.3)
+    * Testeado con Tensorflow-gpu 1.15 - CUDA Toolkit 10.0 - cuDNN 7.6.5
   * librosa
   * tqdm
   * matplotlib
