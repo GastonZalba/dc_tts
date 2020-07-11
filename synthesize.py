@@ -12,7 +12,6 @@ import os
 from hyperparams import Hyperparams as hp
 import numpy as np
 import tensorflow as tf
-import re
 from train import Graph
 from utils import *
 from data_load import load_data
@@ -31,9 +30,10 @@ def synthesize():
     # Load graph
     g = Graph(mode="synthesize"); print("Graph loaded")
 
-    checkpoint = get_latest_checkpoint()
+    checkpoint1 = get_latest_checkpoint()
+    checkpoint2 = get_latest_checkpoint(hp.logdir + "-2")
 
-    print("Working on...", checkpoint)
+    print("Working on...", checkpoint1)
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
@@ -67,25 +67,17 @@ def synthesize():
         Z = sess.run(g.Z, {g.Y: Y})
 
         # Create folder for samples
-        sampledir = hp.sampledir + "_{}".format(checkpoint)
+        sampledir = hp.sampledir + "_{}".format(checkpoint1 + "-" + checkpoint2)
         if not os.path.exists(sampledir): os.makedirs(sampledir)
 
         # Generate wav files
         for i, mag in enumerate(Z):
             print("Working on file", i+1)
             wav = spectrogram2wav(mag)
-            filename =  hp.voice + "_"+ checkpoint + "_" + str(i+1).zfill(2)
+            filename =  hp.voice + "_" + checkpoint1 + "-" + checkpoint2 + "_" + str(i+1).zfill(2)
             outputFile = sampledir + "/{}.wav".format(filename)
             write(outputFile, hp.sr, wav)
             render_spectrogram(outputFile, sampledir + "/" + filename)
-
-
-def get_latest_checkpoint(logdir_path=hp.logdir+ "-1"):
-    with open(os.path.join(logdir_path, "checkpoint")) as f:
-        text = f.readline()
-    pattern = re.compile(r"[0-9]+k")
-    basename = pattern.findall(text)[0]
-    return basename
 
 
 if __name__ == '__main__':

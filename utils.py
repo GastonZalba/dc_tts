@@ -10,6 +10,7 @@ import numpy as np
 import librosa
 import librosa.display
 import os, copy
+import re
 import matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as plt
@@ -187,3 +188,11 @@ def trim(wav, top_db=40, min_silence_sec=0.8):
                                hop_length=hop_length,
                                top_db=top_db)[0, 1]
     return wav[:endpoint]
+
+
+def get_latest_checkpoint(logdir_path=hp.logdir + "-1"):
+    with open(os.path.join(logdir_path, "checkpoint")) as f:
+        text = f.readline()
+    pattern = re.compile(r"[0-9]+k")
+    basename = pattern.findall(text)[0]
+    return basename
