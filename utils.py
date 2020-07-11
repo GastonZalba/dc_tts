@@ -8,6 +8,7 @@ from __future__ import print_function, division
 
 import numpy as np
 import librosa
+import librosa.display
 import os, copy
 import matplotlib
 matplotlib.use('pdf')
@@ -93,6 +94,22 @@ def spectrogram2wav(mag):
 
     return wav.astype(np.float32)
 
+## Adapted from https://github.com/goodatlas/dc_tts
+def render_spectrogram(wavfile, outname):
+    y, sr = librosa.load(wavfile)
+    S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=8000)
+    plt.figure(figsize=(10, 4))
+    librosa.display.specshow(librosa.power_to_db(S,
+                             ref=np.max),
+                             y_axis='mel',
+                             fmax=8000,
+                             x_axis='time')
+    plt.colorbar(format='%+2.0f dB')
+    plt.title('{} Mel spectrogram'.format(outname))
+    plt.tight_layout()
+    plt.savefig(outname + ".png")
+    return
+    
 def griffin_lim(spectrogram):
     '''Applies Griffin-Lim's raw.'''
     X_best = copy.deepcopy(spectrogram)

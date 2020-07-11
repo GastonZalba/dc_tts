@@ -67,15 +67,17 @@ def synthesize():
         Z = sess.run(g.Z, {g.Y: Y})
 
         # Create folder for samples
-        sampledir = hp.sampledir+"_{}".format(checkpoint)
+        sampledir = hp.sampledir + "_{}".format(checkpoint)
         if not os.path.exists(sampledir): os.makedirs(sampledir)
 
         # Generate wav files
         for i, mag in enumerate(Z):
             print("Working on file", i+1)
             wav = spectrogram2wav(mag)
-            filename =  hp.voice + "_"+ checkpoint + "_" + str(i+1)
-            write(sampledir + "/{}.wav".format(filename), hp.sr, wav)
+            filename =  hp.voice + "_"+ checkpoint + "_" + str(i+1).zfill(2)
+            outputFile = sampledir + "/{}.wav".format(filename)
+            write(outputFile, hp.sr, wav)
+            render_spectrogram(outputFile, sampledir + "/" + filename)
 
 
 def get_latest_checkpoint(logdir_path=hp.logdir+ "-1"):
